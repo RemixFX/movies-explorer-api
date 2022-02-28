@@ -4,6 +4,7 @@ const { PORT = 3000 } = process.env;
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
+const cors = require('./middlewares/cors');
 const errorHandler = require('./middlewares/error-handler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const routes = require('./routes');
@@ -18,6 +19,7 @@ mongoose.connect(
   () => console.log('База данных загружена'),
 );
 
+app.use(cors);
 app.use(requestLogger);
 app.use(routes);
 app.use(errorLogger);
