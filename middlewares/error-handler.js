@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 const { isCelebrateError } = require('celebrate');
 
 const errorHandler = (err, req, res, next) => {
