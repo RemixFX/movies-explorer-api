@@ -40,8 +40,8 @@ const deleteMovie = (req, res, next) => Movies.findById(req.params._id)
     if (movie.owner._id.toString() !== req.user._id.toString()) {
       throw new ForbiddenError('Нельзя удалить не свой фильм');
     } else {
-      movie.remove();
-      res.status(200).send({ message: 'Фильм удалён' });
+      return movie.remove()
+        .then(() => res.status(200).send({ message: 'Фильм удалён' }));
     }
   })
   .catch((err) => {

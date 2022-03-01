@@ -1,10 +1,10 @@
 const express = require('express');
-require('dotenv').config();
 
 const { PORT = 3000 } = process.env;
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
+const { MONGO_URL } = require('./config');
 const cors = require('./middlewares/cors');
 const errorHandler = require('./middlewares/error-handler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 mongoose.connect(
-  'mongodb://localhost:27017/bitfilmsdb',
+  MONGO_URL,
   { useNewUrlParser: true },
   () => console.log('База данных загружена'),
 );
