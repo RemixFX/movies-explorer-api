@@ -20,7 +20,7 @@ const login = (req, res, next) => {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
       });
-      res.status(200).send({ message: 'Успешный вход' });
+      res.send({ message: 'Успешный вход' });
     })
     .catch((err) => {
       next(new UnauthorizedError(err.message));
@@ -29,29 +29,23 @@ const login = (req, res, next) => {
 
 const logout = (req, res) => {
   res.clearCookie('jwt');
-  res.status(200).send({ message: 'Выход из профиля' });
+  res.send({ message: 'Выход из профиля' });
 };
 
 const getMyProfile = (req, res, next) => User.findById(req.user._id)
   .orFail(new NotFoundError('Пользователь не найден'))
-  .then((users) => res.status(200).send(users))
-  .catch((err) => {
-    if (err.name === 'CastError') {
-      next(new CastError('Некорректный Id пользователя'));
-    } else {
-      next(err);
-    }
-  });
+  .then((users) => res.send(users))
+  .catch((err) => next(err));
 
 const updateProfile = (req, res, next) => {
   const { name, email } = req.body;
   User.findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true })
     .orFail(new NotFoundError('Пользователь не найден'))
-    .then((user) => res.status(200).send(user))
+    .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
         next(new CastError('Переданы некорректные данные'));
-      } if (err.name === 'MongoServerError' && err.code === 11000) {
+      } if (err.code === 11000) {
         next(new ConflictError('Пользователь с таким email уже существует'));
       } else {
         next(err);
@@ -65,7 +59,7 @@ const createUser = (req, res, next) => {
     .then((hash) => User.create({ name, email, password: hash }))
     .then((user) => res.status(201).send(user))
     .catch((err) => {
-      if (err.name === 'MongoServerError' && err.code === 11000) {
+      if (err.code === 11000) {
         next(new ConflictError('Пользователь с таким email уже существует'));
       } else {
         next(err);
