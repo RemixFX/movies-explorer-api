@@ -9,7 +9,7 @@ const getMovies = (req, res, next) => Movies.find({})
   .catch(next);
 
 const createMovie = (req, res, next) => {
-  const { _id } = req.user;
+  const { name, _id } = req.user;
   const {
     country, director, duration, year, description, image, trailerLink,
     thumbnail, movieId, nameRU, nameEN,
@@ -26,7 +26,7 @@ const createMovie = (req, res, next) => {
     movieId,
     nameRU,
     nameEN,
-    owner: { _id },
+    owner: { name, _id },
   })
     .then((m) => Movies.findById(m._id)
       .populate('owner', 'name'))
