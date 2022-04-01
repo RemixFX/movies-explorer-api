@@ -52,20 +52,17 @@ const validationCreateMovie = celebrate({
     image: Joi.string().required()
       .regex(/^(https?:\/\/)(w{0,3})(([\da-z-]+)\.){1,3}([a-z.]{2,6})([\w-:~?#@!$&'()*+,;=./]*)*\/?$/),
     trailerLink: Joi.string().required()
-      .regex(/^(https?:\/\/)(w{0,3})(([\da-z-]+)\.){1,3}([a-z.]{2,6})([\w-:~?#@!$&'()*+,;=./]*)*\/?$/),
+      .regex(/^(https?:\/\/)(w{0,3})(([\da-z-]+)\.){1,3}([a-z.]{2,6})([\wА-Я\s-:~?#@!$&'()*+,;=./]*)*\/?$/i),
     thumbnail: Joi.string().required()
       .regex(/^(https?:\/\/)(w{0,3})(([\da-z-]+)\.){1,3}([a-z.]{2,6})([\w-:~?#@!$&'()*+,;=./]*)*\/?$/),
-    nameRU: Joi.string().required()
-      .regex(/^[^a-z]+$/i, { name: 'русском' }),
-    nameEN: Joi.string().required()
-      .regex(/^[^а-яё]+$/i, { name: 'английском' }),
+    nameRU: Joi.string().required(),
+    nameEN: Joi.string().required(),
   }).messages({
     'string.empty': 'Поле {#label} не может быть пустым',
     'string.min': 'Поле {#label} должно быть минимум {#limit} символов',
     'string.max': 'Поле {#label} может быть максимум {#limit} символов',
     'any.required': '{#label} - обязательное поле',
     'string.pattern.base': 'Некорректный адрес ссылки1',
-    'string.pattern.name': 'Поле {#label} должно быть на {#name} языке',
     'object.unknown': 'Переданы не разрешенные данные',
   }).unknown(true),
 });

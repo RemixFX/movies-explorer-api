@@ -53,8 +53,7 @@ const movieSchema = new mongoose.Schema(
       required: true,
     },
     movieId: {
-      type: String,
-      // id фильма, который содержится в ответе сервиса MoviesExplorer. type: Map get: ??
+      type: Number,
       required: true,
     },
     nameRU: {
